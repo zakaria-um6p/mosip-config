@@ -252,6 +252,23 @@
             <when>
                 <simple>${bodyAs(String)} contains '"isValid":true'</simple>
                 <to uri="eventbus:message-sender-bus-in" />
+                <to uri="eventbus:training-bus-in" />
+            </when>
+            <when>
+                <simple>${bodyAs(String)} contains '"internalError":true'</simple>
+                <to uri="eventbus:retry-bus-in" />
+            </when>
+            <otherwise>
+                <to uri="eventbus:error-bus-in" />
+            </otherwise>
+        </choice>
+    </route>
+	 <route id="training-stage-->printing stage new route">
+        <from uri="eventbus:training-new-bus-out" />
+        <log message="training-stage-->printing stage new route ${bodyAs(String)}" />
+        <choice>
+            <when>
+                <simple>${bodyAs(String)} contains '"isValid":true'</simple>
                 <to uri="eventbus:printing-bus-in" />
             </when>
             <when>
